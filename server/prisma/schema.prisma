@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile      Profile?
+  skills       Skill[]
+  projects     Project[]
+  achievements Achievement[]
+
+  @@index([username])
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  fio       String
+  fioEn     String?  @map("fio_en")
+  fioZh     String?  @map("fio_zh")
+  bio       String   @default("")
+  bioEn     String?  @map("bio_en")
+  bioZh     String?  @map("bio_zh")
+  avatar    String?  // URL
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
+}
+
+model Skill {
+  id        String   @id @default(cuid())
+  title     String
+  titleEn   String?  @map("title_en")
+  titleZh   String?  @map("title_zh")
+  level     Int      @default(1)
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  nameEn      String?  @map("name_en")
+  nameZh      String?  @map("name_zh")
+  description String   @default("")
+  descriptionEn String? @map("description_en")
+  descriptionZh String? @map("description_zh")
+  link        String?  // URL
+  createdAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+}
+
+model Achievement {
+  id             String   @id @default(cuid())
+  title          String
+  titleEn        String?  @map("title_en")
+  titleZh        String?  @map("title_zh")
+  date           DateTime
+  certificateUrl String?  @map("certificate_url")
+  createdAt      DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+}
+

@@ -5,7 +5,7 @@ services:
     rootDir: server
     plan: free
     autoDeploy: true
-    buildCommand: npm ci && npm run prisma:generate && npm run prisma:migrate:deploy
+    buildCommand: npm ci && npm run prisma:generate && npm run prisma:push
     startCommand: npm start
     envVars:
       - key: NODE_VERSION

@@ -67,6 +67,10 @@ app.use((err, req, res, next) => {
     if (code.startsWith("P1") || msg.toLowerCase().includes("database")) {
       return res.status(500).json({ error: "DB_CONNECTION_FAILED", details: code || undefined });
     }
+    // e.g. missing tables/columns due to migrations not applied
+    if (code === "P2021" || code === "P2022") {
+      return res.status(500).json({ error: "DB_SCHEMA_MISSING", details: code });
+    }
   }
 
   res.status(500).json({ error: "INTERNAL_ERROR" });

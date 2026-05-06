@@ -11,7 +11,8 @@ html[data-theme="light"] {
   --surface-2: #f1f5f9;
   --text: #0f172a;
   --muted: #64748b;
-  --border: #e2e8f0;
+  /* Slightly darker to make input borders visible on white */
+  --border: #cbd5e1;
   --ring: rgba(79, 70, 229, 0.28);
   --primary: #4f46e5; /* indigo */
   --primary-hover: #4338ca;

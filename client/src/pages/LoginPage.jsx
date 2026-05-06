@@ -30,7 +30,7 @@ export function LoginPage() {
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-md gap-4 py-6">
+    <div className="mx-auto grid w-full max-w-md gap-4">
       <div className="flex items-center gap-2">
         <div className="grid size-10 place-items-center rounded-2xl bg-[var(--primary)] text-[var(--primary-contrast)]">
           <KeyRound size={18} />

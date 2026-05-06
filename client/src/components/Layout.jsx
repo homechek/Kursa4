@@ -33,9 +33,10 @@ export function Layout() {
   };
 
   const showTop = true;
+  const isAuthPage = loc.pathname === "/login" || loc.pathname === "/register";
 
   return (
-    <div className="min-h-dvh bg-[var(--bg)] text-[var(--text)]">
+    <div className="flex min-h-dvh flex-col bg-[var(--bg)] text-[var(--text)]">
       {showTop ? (
         <header className="sticky top-0 z-10 border-b border-[var(--border)] bg-[color:var(--surface)]/80 backdrop-blur">
           <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -111,7 +112,12 @@ export function Layout() {
         </header>
       ) : null}
 
-      <main className="mx-auto max-w-5xl px-4 py-6">
+      <main
+        className={[
+          "mx-auto w-full max-w-5xl flex-1 px-4",
+          isAuthPage ? "flex items-center justify-center py-4" : "py-6",
+        ].join(" ")}
+      >
         <Outlet />
       </main>
 

@@ -12,15 +12,9 @@ function levelLabel(level) {
   return `${Math.min(5, Math.max(1, n))}/5`;
 }
 
-function pickTr({ ru, en, zh, lang }) {
-  if (lang === "en") return en || ru || "";
-  if (lang === "zh") return zh || ru || "";
-  return ru || "";
-}
-
 export function PortfolioPage() {
   const { username } = useParams();
-  const { t, lang } = useI18n();
+  const { t } = useI18n();
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
   const [data, setData] = React.useState(null);
@@ -52,8 +46,8 @@ export function PortfolioPage() {
 
   const p = data.profile || {};
   const apiBase = getApiBaseUrl();
-  const fio = pickTr({ ru: p.fio, en: p.fioEn, zh: p.fioZh, lang }) || data.username;
-  const bio = pickTr({ ru: p.bio, en: p.bioEn, zh: p.bioZh, lang }) || "—";
+  const fio = p.fio || data.username;
+  const bio = p.bio || "—";
 
   return (
     <div className="mx-auto grid max-w-3xl gap-6 py-2">
@@ -114,7 +108,7 @@ export function PortfolioPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <div className="truncate font-semibold">
-                      {pickTr({ ru: s.title, en: s.titleEn, zh: s.titleZh, lang })}
+                      {s.title}
                     </div>
                     <div className="text-xs text-[var(--muted)]">
                       {t("level")}: {levelLabel(s.level)}
@@ -144,11 +138,11 @@ export function PortfolioPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="truncate text-base font-semibold">
-                      {pickTr({ ru: p2.name, en: p2.nameEn, zh: p2.nameZh, lang })}
+                      {p2.name}
                     </div>
-                    {pickTr({ ru: p2.description, en: p2.descriptionEn, zh: p2.descriptionZh, lang }) ? (
+                    {p2.description ? (
                       <div className="mt-1 text-sm text-[var(--muted)]">
-                        {pickTr({ ru: p2.description, en: p2.descriptionEn, zh: p2.descriptionZh, lang })}
+                        {p2.description}
                       </div>
                     ) : null}
                   </div>
@@ -181,7 +175,7 @@ export function PortfolioPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="truncate font-semibold">
-                      {pickTr({ ru: a.title, en: a.titleEn, zh: a.titleZh, lang })}
+                      {a.title}
                     </div>
                     <div className="text-xs text-[var(--muted)]">{formatDate(a.date)}</div>
                     {a.certificateUrl ? (

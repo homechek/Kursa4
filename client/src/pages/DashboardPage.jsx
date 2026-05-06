@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ExternalLink, Plus, Trash2 } from "lucide-react";
 
-import { api, getApiBaseUrl, setToken, translate } from "../lib/api.js";
+import { api, getApiBaseUrl, setToken } from "../lib/api.js";
 import { formatDate } from "../lib/format.js";
 import { Badge, Button, Card, Input, SectionTitle, Textarea } from "../components/ui.jsx";
 import { useI18n } from "../lib/i18n.jsx";
@@ -34,15 +34,10 @@ function DashboardInner() {
   const [user, setUser] = React.useState(null);
   const [profile, setProfile] = React.useState({
     fio: "",
-    fioEn: "",
-    fioZh: "",
     bio: "",
-    bioEn: "",
-    bioZh: "",
     avatar: "",
   });
   const [savingProfile, setSavingProfile] = React.useState(false);
-  const [translatingProfile, setTranslatingProfile] = React.useState(false);
   const [avatarFile, setAvatarFile] = React.useState(null);
   const [uploadingAvatar, setUploadingAvatar] = React.useState(false);
 
@@ -68,11 +63,7 @@ function DashboardInner() {
       setUser(data.user);
       setProfile({
         fio: data.user.profile?.fio || "",
-        fioEn: data.user.profile?.fioEn || "",
-        fioZh: data.user.profile?.fioZh || "",
         bio: data.user.profile?.bio || "",
-        bioEn: data.user.profile?.bioEn || "",
-        bioZh: data.user.profile?.bioZh || "",
         avatar: data.user.profile?.avatar || "",
       });
     } catch (err) {
@@ -105,47 +96,6 @@ function DashboardInner() {
       setError(err?.data?.error || t("errorSaveProfile"));
     } finally {
       setSavingProfile(false);
-    }
-  };
-
-  const onAutoTranslateProfile = async () => {
-    setTranslatingProfile(true);
-    setError("");
-    try {
-      const fioEn = profile.fio ? await translate(profile.fio, "en", "ru") : "";
-      const fioZh = profile.fio ? await translate(profile.fio, "zh", "ru") : "";
-      const bioEn = profile.bio ? await translate(profile.bio, "en", "ru") : "";
-      const bioZh = profile.bio ? await translate(profile.bio, "zh", "ru") : "";
-
-      const next = {
-        ...profile,
-        fioEn: profile.fioEn || fioEn,
-        fioZh: profile.fioZh || fioZh,
-        bioEn: profile.bioEn || bioEn,
-        bioZh: profile.bioZh || bioZh,
-      };
-
-      setProfile(next);
-      await api("/api/me/profile", {
-        method: "PUT",
-        auth: true,
-        body: {
-          fio: next.fio,
-          fioEn: next.fioEn || null,
-          fioZh: next.fioZh || null,
-          bio: next.bio,
-          bioEn: next.bioEn || null,
-          bioZh: next.bioZh || null,
-          avatar: next.avatar || null,
-        },
-      });
-      await load();
-    } catch (err) {
-      const code = err?.data?.error || "";
-      if (code === "TRANSLATE_NOT_CONFIGURED") setError(t("translateNotConfigured"));
-      else setError(t("errorSaveProfile"));
-    } finally {
-      setTranslatingProfile(false);
     }
   };
 
@@ -305,11 +255,6 @@ function DashboardInner() {
         <SectionTitle
           title={t("profile")}
           subtitle={t("profileSubtitle")}
-          right={
-            <Button type="button" variant="secondary" onClick={onAutoTranslateProfile} disabled={translatingProfile}>
-              {translatingProfile ? t("avatarUploading") : t("autoTranslate")}
-            </Button>
-          }
         />
         <form className="mt-4 grid gap-3" onSubmit={onSaveProfile}>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -362,30 +307,6 @@ function DashboardInner() {
             value={profile.bio}
             onChange={(e) => setProfile((p) => ({ ...p, bio: e.target.value }))}
           />
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Input
-              label="Full name (EN)"
-              value={profile.fioEn}
-              onChange={(e) => setProfile((p) => ({ ...p, fioEn: e.target.value }))}
-            />
-            <Input
-              label="姓名 (中文)"
-              value={profile.fioZh}
-              onChange={(e) => setProfile((p) => ({ ...p, fioZh: e.target.value }))}
-            />
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <Textarea
-              label="Bio (EN)"
-              value={profile.bioEn}
-              onChange={(e) => setProfile((p) => ({ ...p, bioEn: e.target.value }))}
-            />
-            <Textarea
-              label="简介 (中文)"
-              value={profile.bioZh}
-              onChange={(e) => setProfile((p) => ({ ...p, bioZh: e.target.value }))}
-            />
-          </div>
           <div className="flex justify-end">
             <Button type="submit" disabled={savingProfile}>
               {savingProfile ? t("saving") : t("save")}

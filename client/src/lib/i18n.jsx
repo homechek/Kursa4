@@ -81,9 +81,6 @@ const dict = {
     noFileChosen: "Файл не выбран",
     projectDescPlaceholder: "Коротко: что сделали, технологии, результат",
     dateHint: "Формат: дд.мм.гггг",
-    autoTranslate: "Автоперевод",
-    autoTranslateHint: "Перевод через Google Cloud Translate",
-    translateNotConfigured: "Перевод не настроен на сервере",
     selectImageHint: "PNG/JPG/WebP/GIF, до 2 МБ",
   },
   en: {
@@ -164,9 +161,6 @@ const dict = {
     noFileChosen: "No file chosen",
     projectDescPlaceholder: "Shortly: what you built, tech stack, results",
     dateHint: "Format: YYYY-MM-DD",
-    autoTranslate: "Auto-translate",
-    autoTranslateHint: "Powered by Google Cloud Translate",
-    translateNotConfigured: "Translation is not configured on server",
     selectImageHint: "PNG/JPG/WebP/GIF, up to 2 MB",
   },
   zh: {
@@ -247,9 +241,6 @@ const dict = {
     noFileChosen: "未选择文件",
     projectDescPlaceholder: "简要说明：你做了什么、技术栈、结果",
     dateHint: "格式：YYYY-MM-DD",
-    autoTranslate: "自动翻译",
-    autoTranslateHint: "由 Google Cloud Translate 提供",
-    translateNotConfigured: "服务器未配置翻译服务",
     selectImageHint: "PNG/JPG/WebP/GIF，最大 2MB",
   },
 };

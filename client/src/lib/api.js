@@ -43,12 +43,3 @@ export async function api(path, { method = "GET", body, auth = false } = {}) {
   return data;
 }
 
-export async function translate(text, target, source) {
-  const res = await api("/api/translate", {
-    method: "POST",
-    auth: true,
-    body: { text, target, source },
-  });
-  return res.translated || "";
-}
-

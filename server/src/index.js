@@ -7,7 +7,6 @@ import fs from "node:fs";
 import { authRouter } from "./routes/auth.js";
 import { meRouter } from "./routes/me.js";
 import { portfolioRouter } from "./routes/portfolio.js";
-import { translateRouter } from "./routes/translate.js";
 
 dotenv.config();
 
@@ -46,7 +45,6 @@ app.get("/api/health", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/me", meRouter);
 app.use("/api/portfolio", portfolioRouter);
-app.use("/api/translate", translateRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: "NOT_FOUND" });

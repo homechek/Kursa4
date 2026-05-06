@@ -38,7 +38,7 @@ export function Layout() {
     <div className="min-h-dvh bg-[var(--bg)] text-[var(--text)]">
       {showTop ? (
         <header className="sticky top-0 z-10 border-b border-[var(--border)] bg-[color:var(--surface)]/80 backdrop-blur">
-          <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-3">
             <Link to={authed ? "/dashboard" : "/login"} className="flex items-center gap-2">
               <div className="grid size-9 place-items-center rounded-xl bg-[var(--primary)] text-[var(--primary-contrast)]">
                 <Briefcase size={18} />
@@ -49,7 +49,7 @@ export function Layout() {
               </div>
             </Link>
 
-            <nav className="flex items-center gap-2">
+            <nav className="flex flex-wrap items-center justify-end gap-2">
               <select
                 aria-label={t("language")}
                 value={lang}

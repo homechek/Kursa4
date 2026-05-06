@@ -54,6 +54,21 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err);
+  if (err?.message === "CORS_ORIGIN_NOT_ALLOWED") {
+    return res.status(403).json({ error: "CORS_ORIGIN_NOT_ALLOWED" });
+  }
+
+  // Prisma connection / initialization issues (common on Render when DATABASE_URL is missing/wrong)
+  const code = String(err?.code || "");
+  const name = String(err?.name || "");
+  const msg = String(err?.message || "");
+  if (name.includes("Prisma") || msg.toLowerCase().includes("prisma")) {
+    // e.g. P1001 (can't reach DB), P1000 (auth failed), etc.
+    if (code.startsWith("P1") || msg.toLowerCase().includes("database")) {
+      return res.status(500).json({ error: "DB_CONNECTION_FAILED", details: code || undefined });
+    }
+  }
+
   res.status(500).json({ error: "INTERNAL_ERROR" });
 });
 

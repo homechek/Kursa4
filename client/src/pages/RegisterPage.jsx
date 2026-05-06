@@ -14,11 +14,13 @@ export function RegisterPage() {
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState("");
+  const [errorDetails, setErrorDetails] = React.useState([]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
+    setErrorDetails([]);
     try {
       const data = await api("/api/auth/register", {
         method: "POST",
@@ -27,7 +29,18 @@ export function RegisterPage() {
       setToken(data.token);
       nav("/dashboard");
     } catch (err) {
-      setError(err?.data?.error || t("errorRegister"));
+      const code = err?.data?.error || "";
+      const details = err?.data?.details?.fieldErrors || null;
+
+      if (code === "VALIDATION_ERROR" && details && typeof details === "object") {
+        const lines = Object.entries(details)
+          .flatMap(([field, msgs]) => (Array.isArray(msgs) ? msgs.map((m) => `${field}: ${m}`) : []))
+          .filter(Boolean);
+        setError(code);
+        setErrorDetails(lines);
+      } else {
+        setError(code || t("errorRegister"));
+      }
     } finally {
       setLoading(false);
     }
@@ -67,6 +80,13 @@ export function RegisterPage() {
           {error ? (
             <div className="rounded-xl border border-[color:var(--danger)]/30 bg-[color:var(--danger)]/10 px-3 py-2 text-sm text-[var(--danger)]">
               {error}
+              {errorDetails?.length ? (
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
+                  {errorDetails.map((line) => (
+                    <li key={line}>{line}</li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           ) : null}
 
